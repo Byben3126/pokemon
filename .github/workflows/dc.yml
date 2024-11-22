@@ -1,0 +1,51 @@
+name: GitHub Actions Deploy
+
+on:
+  push:
+    branches:
+      - main # Cette action ne se déclenche que lors d'un push sur la branche 'main'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Github checkout
+        uses: actions/checkout@v4
+
+      # Étape 2 : Configuration de l'agent SSH avec votre clé privée
+      - name: Start SSH Agent
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }} # Ajoutez votre clé SSH dans les secrets GitHub
+
+      # Étape 3 : Ajouter le serveur distant aux known_hosts
+      - name: Add remote server to known_hosts
+        run: ssh-keyscan -H 151.80.58.182 >> ~/.ssh/known_hosts # Remplacez l'IP par l'adresse de votre serveur
+
+      # Étape 4 : Vérifier la connexion SSH et exécuter une commande à distance
+      - name: List files on remote server
+        run: ssh debian@151.80.58.182 "echo 'Hello, World!' > ~/test_file.txt" # Commande test
+
+      # Étape 5 : Configurer Node.js et installer les dépendances
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20 # Vérifiez la version de Node.js utilisée dans votre projet
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Étape 6 : Build du projet
+      - name: Build project
+        run: npm run build # Vous pouvez modifier cette commande pour correspondre à votre projet
+
+      # Étape 7 : Déploiement avec SCP
+      - name: Deploy files to remote server via SCP
+        run: |
+          scp -r dist/* debian@151.80.58.182:/home/debian/  # Copiez les fichiers de 'dist' vers le serveur
+
+      # Étape 8 : Message de fin
+      - name: Message de fin
+        run: echo "🎉 Déploiement réussi !"
