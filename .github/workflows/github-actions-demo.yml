@@ -20,6 +20,10 @@ jobs:
       - name: Add remote server to known_hosts
         run: ssh-keyscan -H 151.80.58.182 >> ~/.ssh/known_hosts
 
+      # Exécuter une commande à distance
+      - name: List files on remote server
+        run: ssh debian@151.80.58.182 "echo 'Hello, World!' > ~/test_file.txt"
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
