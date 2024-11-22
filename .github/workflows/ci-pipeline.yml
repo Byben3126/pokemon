@@ -1,48 +1,32 @@
-name: CI Pipeline
+name: Pokedex CI
 
-# Déclenchement du workflow
-on:
-  push:
-    branches:
-      - main # Ou le nom de votre branche principale
+on: [push]
 
 jobs:
-  display-message:
+  test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - name: Github checkout
+        uses: actions/checkout@v4
 
-      # Étape 2 : Afficher un message
-      - name: Display a message
-        run: echo "Hello! Your pipeline has been triggered successfully."
-        
-  lint-check:
-    runs-on: ubuntu-latest
-
-    steps:
-      # Étape 1 : Vérifier le repo
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      # Étape 2 : Installer les dépendances Node.js
       - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16 # Remplacez par votre version Node.js si nécessaire
+        uses: actions/setup-node@v4
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
-      # Étape 3 : Vérifier le formatage Prettier
+      - name: Run TypeScript
+        run: npx tsc --noEmit
+
       - name: Run Prettier
-        run: npm run format:check
-        env:
-          CI: true
+        run: npx prettier --check .
 
-      # Étape 4 : Vérifier ESLint
       - name: Run ESLint
-        run: npm run lint
-        env:
-          CI: true
+        run: npx eslint .
+
+      - name: Build project
+        run: npm run build
+
+      - name: Message de fin
+        run: echo "🎉 Tout est Ok !"
