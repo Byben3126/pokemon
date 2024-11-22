@@ -19,15 +19,7 @@ jobs:
       # Étape 3 : Ajouter le serveur distant aux known_hosts
       - name: Add remote server to known_hosts
         run: |
-          ssh-keyscan -H <IP_SERVER> >> ~/.ssh/known_hosts
-        env:
-          IP_SERVER: 151.80.58.182
-
-      # Exécuter une commande à distance
-      - name: List files on remote server
-        run: ssh user@${{ env.IP_SERVER }} "ls -la"
-        env:
-          IP_SERVER: 151.80.58.182
+          ssh-keyscan -H 151.80.58.182 >> ~/.ssh/known_hosts
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
