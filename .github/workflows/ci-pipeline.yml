@@ -1,0 +1,20 @@
+name: CI Pipeline
+
+# Déclenchement du workflow
+on:
+  push:
+    branches:
+      - main  # Ou le nom de votre branche principale
+
+jobs:
+  display-message:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Étape 1 : Vérifier le repo (checkout)
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Étape 2 : Afficher un message
+      - name: Display a message
+        run: echo "Hello! Your pipeline has been triggered successfully."
