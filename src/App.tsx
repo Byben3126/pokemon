@@ -15,10 +15,12 @@ function App() {
   const [cards, setCards] = useState<Card[]>([]);
 
   async function search(e: FormEvent) {
+    const   message   = "Hello, world!";
+    console.log(message);
     e.preventDefault();
     console.log("Recherche en cours... avec ", query);
     const data = await fetch(
-      `https://api.pokemontcg.io/v2/cards?q=name:${query}&pageSize=10`
+      `https://api.pokemontcg.io/v2/cards?q=name:${query}&pageSize=10`,
     );
     const json = await data.json();
     setCards(json.data);
