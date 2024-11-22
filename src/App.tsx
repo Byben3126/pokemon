@@ -15,7 +15,7 @@ function App() {
   const [cards, setCards] = useState<Card[]>([]);
 
   async function search(e: FormEvent) {
-    const test = 10;
+    let test = 10;
     console.log(test);
     e.preventDefault();
     console.log("Recherche en cours... avec ", query);
