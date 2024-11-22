@@ -3,7 +3,7 @@ name: GitHub Actions Demo
 on: [push]
 
 jobs:
-  test:
+  gitHubActionsDemo:
     runs-on: ubuntu-latest
 
     steps:
