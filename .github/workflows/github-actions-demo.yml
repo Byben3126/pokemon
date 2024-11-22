@@ -1,4 +1,4 @@
-name: Pokedex CI
+name: GitHub Actions Demo
 
 on: [push]
 
